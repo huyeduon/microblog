@@ -200,7 +200,7 @@ function MainAppContent() {
     <div className="container">
       <div className="header-nav">
         <Link to="/" className="blog-title-link">
-          <h1>My Simple Blog</h1>
+          <h1>Tech Notes</h1>
         </Link>
         <nav>
           {isAuthenticated ? (
