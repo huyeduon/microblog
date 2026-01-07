@@ -1,0 +1,65 @@
+/* frontend/src/pages/AuthForms.css */
+.auth-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: #374151;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.auth-container h2 {
+  color: #D1D5DB;
+  margin-bottom: 25px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.auth-form input {
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.auth-form button {
+  padding: 12px 20px;
+  background-color: #046C4E;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.auth-form button:hover {
+  background-color: #014737;
+}
+
+.auth-link {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #D1D5DB;
+}
+
+.auth-link a {
+  color: #0dc594ff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.auth-link a:hover {
+  text-decoration: underline;
+}
+
+.auth-form input::placeholder {
+  color: #b5b0a7ff; /* A lighter gray for the placeholder text */
+  opacity: 1; /* Firefox often sets a lower opacity by default */
+}

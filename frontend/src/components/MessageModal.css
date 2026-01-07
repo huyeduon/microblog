@@ -1,0 +1,62 @@
+/* frontend/src/components/MessageModal.css */
+
+.message-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* Darker overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1001; /* Ensure it's above other modals like EditPostModal */
+}
+
+.message-modal-content {
+  background-color: #1F2937; /* Dark background from your theme */
+  color: #E5E7EB; /* Light text color */
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.message-modal-content p {
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.message-modal-close-button {
+  background-color: #046C4E; /* Green button from your theme */
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.message-modal-close-button:hover {
+  background-color: #014737; /* Darker green on hover */
+}
+
+/* Optional: Different styles for different message types */
+.message-modal-content.success {
+  border: 2px solid #057A55; /* Green border for success */
+}
+
+.message-modal-content.error {
+  border: 2px solid #C81E1E; /* Red border for error */
+}
+
+.message-modal-content.info {
+  border: 2px solid #3B82F6; /* Blue border for info */
+}

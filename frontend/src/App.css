@@ -1,0 +1,283 @@
+/* my-blog-frontend/src/App.css */
+
+/* Reset default margins/paddings for consistency */
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure html and body take full viewport height and width */
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  min-height: 100%;       /* Allows body to grow beyond viewport height */
+  width: 100%;            /* Ensure body spans full width */
+  padding: 20px 0;        /* Vertical padding for spacing */
+  box-sizing: border-box; /* Include padding in width calculation */
+
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #1F2937;
+  color: #E5E7EB;
+  line-height: 1.6;
+
+  /* --- NEW FLEXBOX FOR HORIZONTAL CENTERING --- */
+  display: flex;             /* Make body a flex container */
+  flex-direction: column;    /* Stack children vertically */
+  align-items: center;       /* Horizontally center flex items (your .container) */
+  /* --- END NEW FLEXBOX --- */
+}
+
+.container {
+  width: 70vw;
+  /* max-width: 1000px; */
+  min-width: 320px;
+  box-sizing: border-box;
+
+  /* --- REMOVED margin: 0 auto; --- */
+  /* align-items: center on the parent (body) now handles horizontal centering */
+  /* margin: 0 auto; */
+
+  /* --- NEW: Prevent container from shrinking if content is too tall --- */
+  flex-shrink: 0;
+
+  background-color: #1F2937;
+  padding: 30px 40px;
+
+
+  /* TEMPORARY VISUAL DEBUGGING - REMOVE AFTER CONFIRMATION */
+  /* border: 2px solid #28a745; */
+}
+
+h1 {
+  text-align: center;
+  color: #057A55;
+  margin-bottom: 35px;
+  font-size: 2.5em;
+  
+  padding-bottom: 15px;
+}
+
+.post-form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 40px;
+  padding: 25px;
+  border: none;
+  border-radius: 8px;
+  background-color: #374151;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.post-form textarea {
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1.05rem;
+  resize: vertical;
+  min-height: 100px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+}
+
+.post-form button {
+  padding: 12px 20px;
+  background-color: #046C4E;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+}
+
+.post-form button:hover {
+  background-color: #014737;
+  transform: translateY(-1px);
+}
+
+.post-form button:active {
+  transform: translateY(0);
+}
+
+.post-list {
+  margin-top: 30px;
+}
+
+.post-item {
+  background-color: #374151;
+  border: 1px solid #4B5563;
+  border-radius: 8px;
+  padding: 20px 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+  color:#E5E7EB
+}
+
+.post-item:hover {
+  transform: translateY(-3px);
+}
+
+.post-date {
+  font-size: 0.9em;
+  color: #777;
+  margin-bottom: 8px;
+  border-bottom: 1px dashed #eee;
+  padding-bottom: 5px;
+}
+
+.post-content {
+  font-size: 1.15em;
+  line-height: 1.7;
+  margin: 0;
+  color: #E5E7EB;
+}
+
+.message {
+  text-align: center;
+  font-style: italic;
+  color: #666;
+  padding: 20px;
+  background-color: #e9ecef;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.error-message {
+  color: #E02424;
+  font-weight: bold;
+  text-align: center;
+  padding: 15px;
+  border: 1px solid #574f50ff;
+  background-color: #FAD1E8;
+
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between; /* Pushes date to left, button to right */
+  align-items: center;
+  margin-bottom: 8px;
+  border-bottom: 1px dashed #eee;
+  padding-bottom: 5px;
+}
+
+.edit-button {
+  background-color: #C27803; /* Blue for edit */
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.edit-button:hover {
+  background-color: #8E4B10;
+}
+
+/* Ensure post-date doesn't have its own border-bottom anymore */
+.post-item .post-date {
+  margin-bottom: 0; /* Reset margin */
+  border-bottom: none; /* Remove border from here */
+  padding-bottom: 0; /* Reset padding */
+}
+
+
+.post-actions {
+  display: flex;
+  gap: 10px; /* Space between Edit and Delete buttons */
+}
+
+.delete-button {
+  background-color: #C81E1E; /* Red for delete */
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.delete-button:hover {
+  background-color: #771D1D;
+}
+
+.blog-title-link {
+  text-decoration: none; /* Remove underline */
+  color: inherit;        /* Inherit color from parent or h1 */
+}
+
+.blog-title-link h1 {
+  /* Ensure these styles are applied correctly to the h1 inside the link */
+  /* You might need to adjust margin/padding if the Link wrapper changes layout */
+  margin: 0; /* Override default h1 margin if Link introduces it */
+  border-bottom: none; /* Override default h1 border if Link introduces it */
+  padding-bottom: 0; /* Override default h1 padding if Link introduces it */
+  font-size: 2em; /* Adjust size to fit next to nav */
+}
+
+.blog-title-link:hover {
+  opacity: 0.8; /* Add a subtle hover effect */
+}
+
+/* Ensure the h1 inside header-nav is correctly styled */
+
+.header-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+  border-bottom: none; /* <--- THIS IS THE FIX: Explicitly remove the border */
+  padding: 15px 40px;
+  background-color: #111827;
+  padding-right: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2); 
+}
+
+.header-nav h1 {
+  margin: 0;
+  padding-bottom: 0;
+  font-size: 2em;
+}
+
+.header-nav nav {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.header-nav nav span.welcome-message { /* Added .welcome-message class */
+  font-weight: normal;
+  color: #FACA15; /* Example: A nice green color */
+  /* You can choose any color you like, e.g., #FFD700 for gold, #17a2b8 for info blue */
+}
+
+/* --- NEW: Styling for text links in navigation --- */
+.nav-text-link {
+  color: #31C48D; /* A distinct color for the text links */
+  text-decoration: none; /* Remove underline */
+  font-weight:normal; /* Make them stand out a bit */
+  padding: 5px 0; /* Add a little padding for click area */
+  transition: color 0.2s ease-in-out; /* Smooth color transition on hover */
+}
+
+.nav-text-link:hover {
+  color: #014737; /* Darker blue on hover */
+  text-decoration: underline; /* Add underline on hover for clarity */
+}
+
+
+
+.blog-title {
+  color: #76A9FA
+}

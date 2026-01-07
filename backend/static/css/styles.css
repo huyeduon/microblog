@@ -1,0 +1,200 @@
+html {
+  font-family: Lato, sans-serif;
+  height: 100%; /* Make html take up full viewport height */
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+}
+
+body {
+  box-sizing: border-box; /* Keep this if you want it */
+  margin: 0;
+  display: flex; /* Enable flexbox on the body */
+  flex-direction: column; /* Arrange children (header, main, footer) vertically */
+  min-height: 100vh; /* Ensure body is at least the full viewport height */
+}
+
+.navbar {
+  max-width: 640px;
+  margin: 50px auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 24px;
+}
+
+.navbar__brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar__logo {
+  margin-right: 30px;
+}
+
+.navbar__navigation {
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  list-style: none;
+  color: #5c6b70;
+}
+
+.navbar__navigation-item {
+  margin-left: 50px;
+}
+
+.navbar__link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.main {
+  width: 70vw;
+  margin: 0 auto;
+  padding: 0px;
+  flex-grow: 1; /* This is the key: main content takes up all available space */
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.form__input {
+  width: 100%;
+}
+
+.form__label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.form__textarea {
+  width: inherit;
+  font-size: 18px;
+  padding: 12px 20px;
+  border: none;
+  background-color: #f3f6f6;
+  margin-bottom: 10px;
+}
+
+.form__submit {
+  background-color: #3cd0ff;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 5px 30px;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+.form__submit:hover {
+  background-color: #18c1e1;
+}
+
+.entry {
+  margin-top: 50px;
+}
+
+.entry__title {
+  display: inline;
+  font-size: 18px;
+}
+
+.entry__date {
+  color: #5c6b70;
+}
+
+.entry__content {
+  font-size: 16px;
+  line-height: 150%;
+}
+
+.footer {
+  background-color: #323f43;
+  padding: 40px 0;
+  /* Remove or adjust margin-top: 50px; as flex-grow on main will handle spacing */
+  /* margin-top: 50px; */
+  border-top: 4px solid black;
+  color: white;
+  font-size: 12px;
+}
+
+.footer__content {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.footer .left {
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer .right {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+.footer__column {
+  display: flex;
+  flex-direction: column;
+  margin-left: 50px;
+}
+
+.footer__item {
+  margin-bottom: 5px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer__item:hover {
+  text-decoration: underline;
+}
+
+.flash-messages-container {
+  list-style: none;
+  padding: 0;
+  margin: 20px auto; /* This centers the container horizontally */
+  max-width: 450px; /* Or match your .main max-width */
+  overflow: hidden;
+}
+
+.flash-message {
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: opacity 0.5s ease-out, height 0.5s ease-out, padding 0.5s ease-out,
+    margin 0.5s ease-out;
+  opacity: 1;
+  height: auto;
+  overflow: hidden;
+  text-align: center; /* Add this line to center the text */
+  background-color: #1f69bdff; /* Light green background */
+  color: white; /* Changed to white text */
+  border: 1px solid #c3e6cb;
+  border-radius: 15px;
+}
+
+.flash-message--error {
+  background-color: #dc3545; /* Changed to a more vibrant red */
+  color: white; /* Changed text color to white for better contrast */
+  border: 1px solid #dc3545; /* Changed border to match the new background */
+}
+
+.flash-message--success {
+  background-color: #d4edda; /* Light green */
+  color: #155724; /* Dark green text */
+  border: 1px solid #c3e6cb;
+}
