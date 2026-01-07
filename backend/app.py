@@ -3,6 +3,7 @@
 import datetime
 import os
 from flask import Flask, request, jsonify
+import models
 from pymongo import MongoClient
 from flask_cors import CORS
 from bson.objectid import ObjectId
@@ -14,7 +15,7 @@ def create_app():
 
     # --- Configuration from Environment Variables ---
     app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "super-secret-dev-key-please-change")
-    MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017/")
+    MONGO_URI = os.environ.get("MONGO_URI", "mongodb://127.0.0.1:27017/")
     MONGO_DB_NAME = os.environ.get("MONGO_DB_NAME", "microblog")
     app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY", "your-jwt-secret-key")
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(hours=1)
@@ -87,6 +88,41 @@ def create_app():
             return jsonify(access_token=access_token, username=username, is_admin=user.get("is_admin", False)), 200
         else:
             return jsonify({"msg": "Bad username or password"}), 401 # Unauthorized
+
+    # --- Admin Endpoint to List Users ---
+    @app.route("/api/users", methods=["GET"])
+    @jwt_required()
+    def list_users():
+        claims = get_jwt()
+        is_admin = claims.get("is_admin", False)
+
+        if not is_admin:
+            return jsonify({"msg": "Admin access required"}), 403
+
+        users = models.get_all_users()
+        return jsonify(users), 200
+
+    # --- Admin Endpoint to Delete User ---
+    @app.route("/api/users/<string:user_id>", methods=["DELETE"])
+    @jwt_required()
+    def delete_user(user_id):
+        claims = get_jwt()
+        is_admin = claims.get("is_admin", False)
+
+        if not is_admin:
+            return jsonify({"msg": "Admin access required"}), 403
+
+        current_user_identity = get_jwt_identity()
+        user_to_delete_doc = models.get_user_by_username(current_user_identity) # Get full user doc for current user
+        
+        # Prevent admin from deleting themselves
+        if user_to_delete_doc and str(user_to_delete_doc['_id']) == user_id:
+            return jsonify({"msg": "Cannot delete your own account"}), 403
+
+        if models.delete_user(user_id):
+            return jsonify({"message": "User deleted successfully"}), 200
+        else:
+            return jsonify({"error": "User not found or failed to delete"}), 404
 
     # --- Post Endpoints (Modified for Authorization) ---
 
