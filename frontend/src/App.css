@@ -258,7 +258,7 @@ h1 {
 
 .header-nav nav span.welcome-message { /* Added .welcome-message class */
   font-weight: normal;
-  color: #31C48D; /* Example: A nice green color */
+  color: #8ddc16ff; /* Example: A nice green color */
   /* You can choose any color you like, e.g., #FFD700 for gold, #17a2b8 for info blue */
 }
 
