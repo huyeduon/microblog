@@ -21,9 +21,9 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import UserList from './pages/UserList';
 
-
+import { API_BASE_URL } from './config';
 // Base URL for your Flask API
-const API_BASE_URL = 'http://127.0.0.1:5000/api';
+
 
 // Main App component wrapper for Router and AuthProvider
 function App() {
@@ -215,7 +215,7 @@ function MainAppContent() {
     <div className="container">
       <div className="header-nav">
         <Link to="/" className="blog-title-link">
-          <h1>My Simple Blog</h1>
+          <h1>Tech Notes</h1>
         </Link>
         <nav>
           {isAuthenticated ? (

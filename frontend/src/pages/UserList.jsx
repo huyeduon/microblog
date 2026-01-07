@@ -5,8 +5,8 @@ import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
 import ConfirmModal from '../components/ConfirmModal'; // For user deletion confirmation
 import MessageModal from '../components/MessageModal'; // For errors/messages
+import { API_BASE_URL } from '../config';
 
-const API_BASE_URL = 'http://127.0.0.1:5000/api';
 
 function UserList() {
   const { isAuthenticated, isAdmin, loading: authLoading } = useAuth();

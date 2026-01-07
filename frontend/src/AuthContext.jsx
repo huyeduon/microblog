@@ -1,12 +1,9 @@
 // frontend/src/AuthContext.jsx
 import React, { createContext, useState, useEffect, useContext } from 'react'; // <--- useContext imported here
 import axios from 'axios';
-
+import { API_BASE_URL } from './config';
 // Create the AuthContext
 export const AuthContext = createContext(null);
-
-// Base URL for your Flask API
-const API_BASE_URL = 'http://127.0.0.1:5000/api'; // Ensure this matches your Flask API URL
 
 // AuthProvider component manages authentication state
 export const AuthProvider = ({ children }) => {
