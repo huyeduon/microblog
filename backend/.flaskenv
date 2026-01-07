@@ -1,9 +1,0 @@
-FLASK_APP=app.py
-FLASK_ENV=development
-FLASK_DEBUG=1
-FLASK_SECRET_KEY=your_long_random_and_unique_development_secret_key_here
-MONGO_URI=mongodb://localhost:27017/
-MONGO_DB_NAME=microblog
-JWT_SECRET_KEY=super-secret-jwt-key-for-dev-only
-DEFAULT_ADMIN_USERNAME=admin
-DEFAULT_ADMIN_PASSWORD=cisco123
