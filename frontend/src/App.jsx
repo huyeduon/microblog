@@ -1,19 +1,31 @@
 // frontend/src/App.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './App.css';
+import './App.css'; // Main application CSS
+
+// Component Imports
 import PostList from './components/PostList';
 import EditPostModal from './components/EditPostModal';
 import MessageModal from './components/MessageModal';
 import ConfirmModal from './components/ConfirmModal';
-import { AuthProvider, useAuth } from './AuthContext';
+
+// Authentication Context
+// useAuth is now imported from AuthContext.jsx again
+import { AuthProvider, useAuth } from './AuthContext'; // <--- UPDATED IMPORT
+
+// React Router for navigation
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+
+// Page Components
 import Login from './pages/Login';
 import Register from './pages/Register';
-import UserList from './pages/UserList'; // <--- Import UserList
+import UserList from './pages/UserList';
 
+
+// Base URL for your Flask API
 const API_BASE_URL = 'http://127.0.0.1:5000/api';
 
+// Main App component wrapper for Router and AuthProvider
 function App() {
   return (
     <Router>
@@ -24,26 +36,31 @@ function App() {
   );
 }
 
+// Component that uses AuthContext and other hooks
 function MainAppContent() {
+  // State for posts and general app status
   const [posts, setPosts] = useState([]);
-  const [newPostContent, setNewPostContent] = useState('');
+  const [newPostContent, setNewPostContent] = useState(''); // Plain text string
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // State for Edit Post Modal
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [postToEdit, setPostToEdit] = useState(null);
 
+  // State for Delete Post Confirmation Modal
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState(null);
 
-  const { isAuthenticated, user, logout, loading: authLoading, isAdmin } = useAuth();
-
-  // --- NEW: State for MessageModal (global for App) ---
+  // State for general App-level Message Modal (e.g., for "content cannot be empty")
   const [isAppMessageModalOpen, setIsAppMessageModalOpen] = useState(false);
   const [appMessageModalContent, setAppMessageModalContent] = useState('');
   const [appMessageModalType, setAppMessageModalType] = useState('info');
-  // --- END NEW ---
 
+  // Authentication context
+  const { isAuthenticated, user, logout, loading: authLoading, isAdmin } = useAuth();
+
+  // --- Data Fetching ---
   const fetchPosts = async () => {
     try {
       setLoading(true);
@@ -64,16 +81,18 @@ function MainAppContent() {
     }
   };
 
+  // Fetch posts when auth status changes (after initial load)
   useEffect(() => {
     if (!authLoading) {
       fetchPosts();
     }
   }, [authLoading]);
 
+  // --- Post Creation ---
   const handleAddPost = async (e) => {
     e.preventDefault();
+    // Simple validation for plain text
     if (!newPostContent.trim()) {
-      // Use MessageModal instead of alert
       setAppMessageModalContent("Post content cannot be empty!");
       setAppMessageModalType('error');
       setIsAppMessageModalOpen(true);
@@ -85,7 +104,7 @@ function MainAppContent() {
         content: newPostContent
       });
       console.log("Post added:", response.data);
-      setNewPostContent('');
+      setNewPostContent(''); // Clear the textarea
       fetchPosts();
       setError(null);
     } catch (err) {
@@ -102,6 +121,7 @@ function MainAppContent() {
     }
   };
 
+  // --- Post Editing ---
   const handleEditClick = (post) => {
     setPostToEdit(post);
     setIsEditModalOpen(true);
@@ -135,9 +155,10 @@ function MainAppContent() {
     }
   };
 
+  // --- Post Deletion ---
   const handleDeletePost = (postId) => {
     setPostIdToDelete(postId);
-    setIsConfirmModalOpen(true);
+    setIsConfirmModalOpen(true); // Open confirmation modal
   };
 
   const confirmDelete = async () => {
@@ -170,7 +191,7 @@ function MainAppContent() {
     setPostIdToDelete(null);
   };
 
-  // --- NEW: Register Success Modal Handling ---
+  // --- Global Message Modal Handlers ---
   const handleRegisterSuccess = (message) => {
     setAppMessageModalContent(message);
     setAppMessageModalType('success');
@@ -179,13 +200,7 @@ function MainAppContent() {
 
   const handleCloseAppMessageModal = () => {
     setIsAppMessageModalOpen(false);
-    // If it was a registration success message, navigate to login
-    if (appMessageModalType === 'success' && appMessageModalContent.includes('Registration successful')) {
-      // This part is now handled by Register.jsx directly, but leaving the logic here
-      // if you decide to centralize message handling.
-    }
   };
-  // --- END NEW ---
 
 
   if (authLoading) {
@@ -200,13 +215,13 @@ function MainAppContent() {
     <div className="container">
       <div className="header-nav">
         <Link to="/" className="blog-title-link">
-          <h1>Tech Notes</h1>
+          <h1>My Simple Blog</h1>
         </Link>
         <nav>
           {isAuthenticated ? (
             <>
               <span className="welcome-message">Hello, {user?.username} {isAdmin && "(Admin)"}!</span>
-              {isAdmin && ( // <--- NEW: Admin Link
+              {isAdmin && (
                 <Link to="/users" className="nav-text-link">Manage Users</Link>
               )}
               <Link to="/" onClick={logout} className="nav-text-link">Logout</Link>
@@ -222,9 +237,8 @@ function MainAppContent() {
 
       <Routes>
         <Route path="/login" element={<Login />} />
-        {/* Pass handleRegisterSuccess to Register */}
         <Route path="/register" element={<Register onRegisterSuccess={handleRegisterSuccess} />} />
-        <Route path="/users" element={<UserList />} /> {/* <--- NEW: UserList Route */}
+        <Route path="/users" element={<UserList />} />
         <Route path="/" element={
           <>
             {isAuthenticated && (
@@ -259,7 +273,6 @@ function MainAppContent() {
         onCancel={cancelDelete}
       />
 
-      {/* Global MessageModal for App-level messages */}
       <MessageModal
         isOpen={isAppMessageModalOpen}
         message={appMessageModalContent}

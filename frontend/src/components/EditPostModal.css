@@ -14,37 +14,44 @@
 }
 
 .modal-content {
-  background-color: #fff;
+  background-color: #1F2937; /* Dark background from your theme */
+  color: #E5E7EB; /* Light text color */
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   width: 90%;
-  max-width: 500px; /* Limit modal width */
+  max-width: 600px; /* Slightly wider for editor */
   box-sizing: border-box;
 }
 
 .modal-content h2 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #057A55; /* Green color for modal title */
   text-align: center;
   margin-bottom: 25px;
 }
 
+/* --- NEW: Textarea styling for modal --- */
 .modal-content textarea {
   width: 100%;
   padding: 12px;
   margin-bottom: 20px;
-  border: 1px solid #ccc;
+  border: 1px solid #4B5563; /* Darker border */
   border-radius: 6px;
   font-size: 1rem;
   resize: vertical;
+  min-height: 150px; /* Good height for editor */
   box-sizing: border-box;
+  background-color: #374151; /* Dark background for textarea */
+  color: #E5E7EB; /* Light text color */
 }
+/* --- END NEW --- */
 
 .modal-actions {
   display: flex;
   justify-content: flex-end; /* Align buttons to the right */
   gap: 10px; /* Space between buttons */
+  margin-top: 20px; /* Space above buttons */
 }
 
 .modal-actions button {

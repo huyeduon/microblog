@@ -1,9 +1,13 @@
 // frontend/src/components/EditPostModal.jsx
 import React, { useState, useEffect } from 'react';
-import './EditPostModal.css'; // We'll create this CSS file
+import './EditPostModal.css'; // CSS for the modal
+
+// REMOVED: React-Quill imports
+// import ReactQuill from 'react-quill';
+// import 'react-quill/dist/quill.snow.css';
 
 function EditPostModal({ isOpen, onClose, postToEdit, onSave }) {
-  const [editedContent, setEditedContent] = useState('');
+  const [editedContent, setEditedContent] = useState(''); // Plain text string
 
   // Update editedContent when postToEdit changes (i.e., modal opens with a new post)
   useEffect(() => {
@@ -16,8 +20,9 @@ function EditPostModal({ isOpen, onClose, postToEdit, onSave }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Simple validation for plain text
     if (!editedContent.trim()) {
-      alert("Post content cannot be empty!");
+      alert("Post content cannot be empty!"); // Consider using a MessageModal here too
       return;
     }
     onSave(postToEdit._id, editedContent); // Call onSave from App.jsx
@@ -31,7 +36,8 @@ function EditPostModal({ isOpen, onClose, postToEdit, onSave }) {
           <textarea
             value={editedContent}
             onChange={(e) => setEditedContent(e.target.value)}
-            rows="6"
+            placeholder="Edit your post content here..."
+            rows="8" // Give it some height
             required
           ></textarea>
           <div className="modal-actions">

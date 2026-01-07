@@ -5,20 +5,11 @@ from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
 import os
-
-
-# --- Helper function to convert HTML to plain text ---
-def html_to_plain_text(html_content):
-    """Converts an HTML string to plain text."""
-    if not html_content:
-        return ""
-    soup = BeautifulSoup(html_content, 'html.parser')
-    # Get text, then strip extra whitespace
-    plain_text = soup.get_text(separator=' ', strip=True)
-    return plain_text
+# REMOVED: from bs4 import BeautifulSoup
+# REMOVED: html_to_plain_text function
 
 # --- Database Connection (initialized once) ---
-MONGO_URI = os.environ.get("MONGO_URI", "mongodb://127.0.0.1:27017/")
+MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017/")
 MONGO_DB_NAME = os.environ.get("MONGO_DB_NAME", "microblog")
 
 client = MongoClient(MONGO_URI)
@@ -41,7 +32,7 @@ def create_user(username, password, is_admin=False):
         "is_admin": is_admin
     }
     result = users_collection.insert_one(user_data)
-    user_data['_id'] = str(result.inserted_id)
+    user_data['_id'] = str(result.inserted_id) # Add stringified ID for convenience
     return user_data
 
 def verify_user_password(username, password):
@@ -65,12 +56,12 @@ def delete_user(user_id):
     try:
         object_id = ObjectId(user_id)
     except Exception:
-        return False
+        return False # Invalid ObjectId format
 
     result = users_collection.delete_one({"_id": object_id})
-    return result.deleted_count > 0
+    return result.deleted_count > 0 # True if deleted, False if not found
 
-# --- Post Model Functions ---
+# --- Post Model Functions (Updated to store HTML) ---
 def get_all_posts():
     """Retrieves all posts, sorted by timestamp descending."""
     posts_cursor = posts_collection.find({}).sort("timestamp", -1)
@@ -85,19 +76,19 @@ def get_post_by_id(post_id):
     try:
         post = posts_collection.find_one({"_id": ObjectId(post_id)})
         if post:
-            post['_id'] = str(post['_id'])
+            post['_id'] = str(post['_id']) # Stringify _id for JSON serialization
         return post
     except Exception:
-        return None
+        return None # Invalid ObjectId format or other error
 
-def create_post(html_content, author): # <--- Changed parameter name
-    """Creates a new post with current timestamp and author, converting HTML to plain text."""
-    plain_text_content = html_to_plain_text(html_content) # <--- CONVERT TO PLAIN TEXT
+def create_post(html_content, author): # Parameter name remains html_content
+    """Creates a new post with current timestamp and author, storing HTML directly."""
+    # REMOVED: plain_text_content = html_to_plain_text(html_content)
     now = datetime.datetime.now()
     formatted_date = now.strftime("%Y-%m-%d")
     formatted_timestamp = now.isoformat()
     new_post = {
-        "content": plain_text_content, # <--- Store plain text
+        "content": html_content, # Store HTML directly
         "date": formatted_date,
         "timestamp": formatted_timestamp,
         "author": author
@@ -106,9 +97,9 @@ def create_post(html_content, author): # <--- Changed parameter name
     new_post['_id'] = str(result.inserted_id)
     return new_post
 
-def update_post(post_id, html_content): # <--- Changed parameter name
-    """Updates the content of an existing post, converting HTML to plain text."""
-    plain_text_content = html_to_plain_text(html_content) # <--- CONVERT TO PLAIN TEXT
+def update_post(post_id, html_content): # Parameter name remains html_content
+    """Updates the content of an existing post, storing HTML directly."""
+    # REMOVED: plain_text_content = html_to_plain_text(html_content)
     try:
         object_id = ObjectId(post_id)
     except Exception:
@@ -116,7 +107,7 @@ def update_post(post_id, html_content): # <--- Changed parameter name
 
     result = posts_collection.update_one(
         {"_id": object_id},
-        {"$set": {"content": plain_text_content}} # <--- Store plain text
+        {"$set": {"content": html_content}} # Store HTML directly
     )
     return result.matched_count > 0 and result.modified_count > 0
 

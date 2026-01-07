@@ -61,7 +61,8 @@ function UserList() {
 
   // --- Delete User Logic ---
   const handleDeleteClick = (user) => {
-    if (user.is_admin && user.username === 'admin') { // Prevent deleting the default 'admin' user
+    // Prevent deleting the currently logged-in admin user
+    if (user.is_admin && user.username === 'admin') { // Assuming 'admin' is the default admin username
       setMessageModalContent("Cannot delete the default 'admin' account.");
       setMessageModalType('error');
       setIsMessageModalOpen(true);
@@ -111,7 +112,7 @@ function UserList() {
 
   if (authLoading || loading) {
     return (
-      <div className="container">
+      <div className="container"> {/* Keep container here for loading/error states */}
         <p className="message">Loading users...</p>
       </div>
     );
@@ -119,7 +120,7 @@ function UserList() {
 
   if (error) {
     return (
-      <div className="container">
+      <div className="container"> {/* Keep container here for loading/error states */}
         <p className="error-message">{error}</p>
       </div>
     );
@@ -128,14 +129,15 @@ function UserList() {
   // If not admin, and not loading, show unauthorized message (should be redirected by useEffect)
   if (!isAdmin) {
     return (
-      <div className="container">
+      <div className="container"> {/* Keep container here for loading/error states */}
         <p className="error-message">Unauthorized: Admin access required.</p>
       </div>
     );
   }
 
   return (
-    <div className="container">
+    // --- REMOVED className="container" from this div ---
+    <div>
       <h2>Manage Users</h2>
       <div className="user-list">
         {users.length === 0 ? (
