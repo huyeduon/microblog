@@ -5,6 +5,7 @@ backend/.venv/
 backend/venv/
 backend/__pycache__/
 backend/*.pyc
+backend/.flask.env
 
 # Frontend Node.js modules
 frontend/node_modules/
