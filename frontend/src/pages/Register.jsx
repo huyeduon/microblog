@@ -61,7 +61,7 @@ function Register({ onRegisterSuccess }) { // <--- Receive onRegisterSuccess pro
         />
         <input
           type="password"
-          placeholder="Re-enter Password"
+          placeholder="Confirm Password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           onFocus={handleInputFocus}
