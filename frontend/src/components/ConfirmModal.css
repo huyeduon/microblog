@@ -1,0 +1,67 @@
+/* frontend/src/components/ConfirmModal.css */
+
+.confirm-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1002; /* Ensure it's on top of other modals like EditPostModal */
+}
+
+.confirm-modal-content {
+  background-color: #1F2937; /* Dark background from your theme */
+  color: #E5E7EB; /* Light text color */
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-sizing: border-box;
+  border: 2px solid #C27803; /* A subtle border for confirmation */
+}
+
+.confirm-modal-content p {
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.confirm-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* Space between buttons */
+}
+
+.confirm-button {
+  border: none;
+  padding: 10px 25px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.confirm-button.confirm-yes {
+  background-color: #dc3545; /* Red for Yes (delete action) */
+  color: white;
+}
+
+.confirm-button.confirm-yes:hover {
+  background-color: #c82333;
+}
+
+.confirm-button.confirm-no {
+  background-color: #6c757d; /* Gray for No (cancel action) */
+  color: white;
+}
+
+.confirm-button.confirm-no:hover {
+  background-color: #5a6268;
+}

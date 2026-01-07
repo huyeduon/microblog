@@ -4,11 +4,13 @@ import axios from 'axios';
 import './App.css';
 import PostList from './components/PostList';
 import EditPostModal from './components/EditPostModal';
+import MessageModal from './components/MessageModal';
+import ConfirmModal from './components/ConfirmModal';
 import { AuthProvider, useAuth } from './AuthContext';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import About from './pages/About'
+import UserList from './pages/UserList'; // <--- Import UserList
 
 const API_BASE_URL = 'http://127.0.0.1:5000/api';
 
@@ -31,7 +33,16 @@ function MainAppContent() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [postToEdit, setPostToEdit] = useState(null);
 
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [postIdToDelete, setPostIdToDelete] = useState(null);
+
   const { isAuthenticated, user, logout, loading: authLoading, isAdmin } = useAuth();
+
+  // --- NEW: State for MessageModal (global for App) ---
+  const [isAppMessageModalOpen, setIsAppMessageModalOpen] = useState(false);
+  const [appMessageModalContent, setAppMessageModalContent] = useState('');
+  const [appMessageModalType, setAppMessageModalType] = useState('info');
+  // --- END NEW ---
 
   const fetchPosts = async () => {
     try {
@@ -62,7 +73,10 @@ function MainAppContent() {
   const handleAddPost = async (e) => {
     e.preventDefault();
     if (!newPostContent.trim()) {
-      alert("Post content cannot be empty!");
+      // Use MessageModal instead of alert
+      setAppMessageModalContent("Post content cannot be empty!");
+      setAppMessageModalType('error');
+      setIsAppMessageModalOpen(true);
       return;
     }
 
@@ -110,7 +124,7 @@ function MainAppContent() {
     } catch (err) {
       console.error("Error updating post:", err);
       let errorMessage = "Failed to update post.";
-      if (err.response && err.response.status === 401 || err.response.status === 403) {
+      if (err.response && (err.response.status === 401 || err.response.status === 403)) {
         errorMessage = "You are not authorized to edit this post.";
       } else if (err.response && err.response.data && err.response.data.error) {
         errorMessage += ` Server says: ${err.response.data.error}`;
@@ -121,19 +135,24 @@ function MainAppContent() {
     }
   };
 
-  const handleDeletePost = async (postId) => {
-    if (!window.confirm("Are you sure you want to delete this post?")) {
-      return;
-    }
+  const handleDeletePost = (postId) => {
+    setPostIdToDelete(postId);
+    setIsConfirmModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    setIsConfirmModalOpen(false);
+    if (!postIdToDelete) return;
+
     try {
-      await axios.delete(`${API_BASE_URL}/posts/${postId}`);
-      console.log("Post deleted:", postId);
+      await axios.delete(`${API_BASE_URL}/posts/${postIdToDelete}`);
+      console.log("Post deleted:", postIdToDelete);
       fetchPosts();
       setError(null);
     } catch (err) {
       console.error("Error deleting post:", err);
       let errorMessage = "Failed to delete post.";
-      if (err.response && err.response.status === 401 || err.response.status === 403) {
+      if (err.response && (err.response.status === 401 || err.response.status === 403)) {
         errorMessage = "You are not authorized to delete this post.";
       } else if (err.response && err.response.data && err.response.data.error) {
         errorMessage += ` Server says: ${err.response.data.error}`;
@@ -141,8 +160,33 @@ function MainAppContent() {
         errorMessage += ` Network error: ${err.message}`;
       }
       setError(errorMessage);
+    } finally {
+      setPostIdToDelete(null);
     }
   };
+
+  const cancelDelete = () => {
+    setIsConfirmModalOpen(false);
+    setPostIdToDelete(null);
+  };
+
+  // --- NEW: Register Success Modal Handling ---
+  const handleRegisterSuccess = (message) => {
+    setAppMessageModalContent(message);
+    setAppMessageModalType('success');
+    setIsAppMessageModalOpen(true);
+  };
+
+  const handleCloseAppMessageModal = () => {
+    setIsAppMessageModalOpen(false);
+    // If it was a registration success message, navigate to login
+    if (appMessageModalType === 'success' && appMessageModalContent.includes('Registration successful')) {
+      // This part is now handled by Register.jsx directly, but leaving the logic here
+      // if you decide to centralize message handling.
+    }
+  };
+  // --- END NEW ---
+
 
   if (authLoading) {
     return (
@@ -156,20 +200,21 @@ function MainAppContent() {
     <div className="container">
       <div className="header-nav">
         <Link to="/" className="blog-title-link">
-          <h1 className="blog-title">My Tech Notes</h1>
+          <h1>My Simple Blog</h1>
         </Link>
         <nav>
           {isAuthenticated ? (
             <>
               <span className="welcome-message">Hello, {user?.username} {isAdmin && "(Admin)"}!</span>
-              {/* Changed to Link for consistency with text style, using onClick for logout */}
+              {isAdmin && ( // <--- NEW: Admin Link
+                <Link to="/users" className="nav-text-link">Manage Users</Link>
+              )}
               <Link to="/" onClick={logout} className="nav-text-link">Logout</Link>
             </>
           ) : (
             <>
-              <Link to="/login" className="nav-text-link">Login</Link> {/* Changed className */}
-              <Link to="/register" className="nav-text-link">Register</Link> {/* Changed className */}
-              <Link to="/about" className="nav-text-link">About</Link> {/* Changed className */}
+              <Link to="/login" className="nav-text-link">Login</Link>
+              <Link to="/register" className="nav-text-link">Register</Link>
             </>
           )}
         </nav>
@@ -177,8 +222,9 @@ function MainAppContent() {
 
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/about" element={<About />} />
+        {/* Pass handleRegisterSuccess to Register */}
+        <Route path="/register" element={<Register onRegisterSuccess={handleRegisterSuccess} />} />
+        <Route path="/users" element={<UserList />} /> {/* <--- NEW: UserList Route */}
         <Route path="/" element={
           <>
             {isAuthenticated && (
@@ -204,6 +250,21 @@ function MainAppContent() {
         onClose={handleCloseEditModal}
         postToEdit={postToEdit}
         onSave={handleSaveEditedPost}
+      />
+
+      <ConfirmModal
+        isOpen={isConfirmModalOpen}
+        message="Are you sure you want to delete this post?"
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+      />
+
+      {/* Global MessageModal for App-level messages */}
+      <MessageModal
+        isOpen={isAppMessageModalOpen}
+        message={appMessageModalContent}
+        onClose={handleCloseAppMessageModal}
+        type={appMessageModalType}
       />
     </div>
   );
